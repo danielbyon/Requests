@@ -50,28 +50,28 @@ Typical usage will involve implementing `DataRequest`, `DecodableRequest`, or `N
 Example:
 
 	struct Recipe: Decodable {
-		let name: String
-		let ingredients: [String]
-		let steps: [String]
+	  let name: String
+	  let ingredients: [String]
+	  let steps: [String]
 	}
 	
 	struct RecipeRequest: DecodableRequest {
-		
-		typealias Success = Recipe
-		typealias Failure = Error
-		
-		var identifier: String {
-			return recipeId
-		}
-		
-		let recipeId: String
-		
-		func makeURLRequest(completion: @escaping (Result<URLRequest, Error>) -> Void) {
-			let url = URL(string: "https://recipes.com/fakeapi/recipe/\(recipeId)")!
-			let urlRequest = URLRequest(url: url)
-			completion(.success(urlRequest))
-		}
-		
+	  
+	  typealias Success = Recipe
+	  typealias Failure = Error
+	  
+	  var identifier: String {
+	    return recipeId
+	  }
+	  
+	  let recipeId: String
+	  
+	  func makeURLRequest(completion: @escaping (Result<URLRequest, Error>) -> Void) {
+	    let url = URL(string: "https://recipes.com/fakeapi/recipe/\(recipeId)")!
+	    let urlRequest = URLRequest(url: url)
+	    completion(.success(urlRequest))
+	  }
+	  
 	}
 
 Now you have a `RecipeRequest` that returns a `Recipe` on success, execute it by adding it to an `OperationQueue`:
@@ -79,11 +79,11 @@ Now you have a `RecipeRequest` that returns a `Recipe` on success, execute it by
 	let queue = OperationQueue()
 	let request = RecipeRequest(recipeId: "1")
 	queue.addRequest(request) { result in
-		switch result {
-			case .success(let recipe):
-				print("Recipe name: \(recipe.name)")
-			case .failure(let error):
-				print(error)
-		}
+	  switch result {
+	    case .success(let recipe):
+	  	  print("Recipe name: \(recipe.name)")
+	    case .failure(let error):
+	      print(error)
+	  }
 	}
 
