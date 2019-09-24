@@ -38,7 +38,7 @@ open class ConcurrentOperation: Operation {
     
     // MARK: Variables
 
-    open internal(set) var state: State = .ready {
+    open var state: State = .ready {
         willSet {
             willChangeValue(forKey: newValue.rawValue)
             willChangeValue(forKey: state.rawValue)
