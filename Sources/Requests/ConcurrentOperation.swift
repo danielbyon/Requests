@@ -45,9 +45,6 @@ open class ConcurrentOperation: Operation {
         }
         didSet {
             didChangeValue(forKey: oldValue.rawValue)
-            if case .finished = state {
-                callCompletion()
-            }
             didChangeValue(forKey: state.rawValue)
         }
     }
@@ -72,7 +69,7 @@ open class ConcurrentOperation: Operation {
 
     open override func start() {
         guard !isCancelled else {
-            callCompletion()
+            state = .finished
             return
         }
 
@@ -87,14 +84,4 @@ open class ConcurrentOperation: Operation {
         }
     }
     
-    // MARK: Private
-
-    private func callCompletion() {
-        guard let completionBlock = self.completionBlock else {
-            return
-        }
-        self.completionBlock = nil
-        completionBlock()
-    }
-
 }
