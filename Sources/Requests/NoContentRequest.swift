@@ -27,17 +27,24 @@
 import Foundation
 
 public protocol NoContentRequest: DataRequest where Success == Void {
+
+    /// An error will be thrown if this is `true`, and the response contains non-empty data.
+    var shouldEnforceNoContent: Bool { get }
     
 }
 
 public extension NoContentRequest {
+
+    var shouldEnforceNoContent: Bool {
+        return true
+    }
     
     var validHTTPStatusCodes: [Int] {
         return [204]
     }
     
     func processData(_ data: Data) throws -> Success {
-        guard data.isEmpty else {
+        if !data.isEmpty && shouldEnforceNoContent {
             // If this is truly a "no content" request, it should not receive data in the response.
             throw RequestQueueError.nonEmptyData
         }
