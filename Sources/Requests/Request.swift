@@ -26,7 +26,7 @@
 
 import Foundation
 
-public protocol Request: Equatable {
+public protocol Request {
 
     associatedtype Success
     associatedtype Failure: Error
@@ -37,14 +37,6 @@ public protocol Request: Equatable {
     var identifier: String { get }
 
     func mapError(_ error: Error) -> Failure
-
-}
-
-public extension Request {
-
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
 
 }
 

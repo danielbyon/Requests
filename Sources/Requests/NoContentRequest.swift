@@ -44,7 +44,7 @@ public extension NoContentRequest {
     }
     
     func processData(_ data: Data) throws -> Success {
-        if !data.isEmpty && shouldEnforceNoContent {
+        if data.isEmpty && shouldEnforceNoContent {
             // If this is truly a "no content" request, it should not receive data in the response.
             throw RequestQueueError.nonEmptyData
         }

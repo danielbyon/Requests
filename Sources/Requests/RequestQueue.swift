@@ -70,7 +70,7 @@ extension OperationQueue: RequestQueue {
 
     open func requestCurrentlyExecuting<T: Request>(_ request: T) -> Operation? {
         return operations.compactMap { $0 as? RequestQueueOperation<T> }
-            .first { !$0.isFinished && $0.request == request }
+            .first { !$0.isFinished && $0.request.identifier == request.identifier }
     }
     
 }
