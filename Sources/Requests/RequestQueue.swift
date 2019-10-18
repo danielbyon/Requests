@@ -80,20 +80,20 @@ private extension OperationQueue {
 
     func addRequestOperation<T: DataRequest>(for request: T, session: URLSession, completionQueue: DispatchQueue?, completion: T.CompletionType?) -> Operation {
         let operation = DataOperation(request: request, session: session)
-        operation.completionBlock = { [weak self, weak operation] in
-            guard let self = self,
-                let result = operation?.result else {
-                    return
+        operation.completionBlock = { [weak operation] in
+            guard let result = operation?.result else {
+                return
             }
             
-            if let completionQueue = completionQueue,
-                completionQueue != self.underlyingQueue {
+            if let completionQueue = completionQueue {
                 completionQueue.async {
                     completion?(result)
                 }
             } else {
-                // Didn't specify a queue, or queue specified is the same as underlyingQueue, run it immediately.
-                completion?(result)
+                // Didn't specify a queue, run it on global utility
+                DispatchQueue.global(qos: .utility).async {
+                    completion?(result)
+                }
             }
         }
         addOperation(operation)
